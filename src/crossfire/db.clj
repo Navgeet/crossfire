@@ -3,7 +3,8 @@
             [monger.collection :as coll])
   (:import [org.bson.types ObjectId]))
 
-(mg/connect! )
+;; (mg/connect! )
+(mg/connect-via-uri! (System/genenv "MONGOHQ_URL"))
 (def db (mg/set-db! (mg/get-db "kcl")))
 
 (defn insert [doc]
