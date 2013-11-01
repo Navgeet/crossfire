@@ -8,7 +8,7 @@
                  [com.novemberain/monger "1.7.0-beta1"]]
   :plugins [[lein-ring "0.8.5"]]
   :ring {:handler crossfire.handler/app}
-  :profiles
   :min-lein-version "2.2.0"
   :main crossfire.handler
+  :profiles
   {:dev {:dependencies [[ring-mock "0.1.5"]]}})
