@@ -9,4 +9,5 @@
   :plugins [[lein-ring "0.8.5"]]
   :ring {:handler crossfire.handler/app}
   :profiles
+  :main crossfire.handler
   {:dev {:dependencies [[ring-mock "0.1.5"]]}})
