@@ -3,6 +3,7 @@
   (:require [crossfire.views :as views]
             [crossfire.misc :as misc]
             [crossfire.db :as db]
+            [clojure.set :refer [difference]]
             [cemerick.friend :as friend]
             [cemerick.friend.credentials :refer (hash-bcrypt)]
             (cemerick.friend [workflows :as workflows]
@@ -40,6 +41,18 @@
 (defn- route-with-common-data [view req & args]
   (views/view view (friend/current-authentication) args))
 
+(defn- players-taken []
+  (set (reduce (fn [sum item]
+                 (concat sum (remove nil? (:players item))))
+               [] (db/get-clans))))
+
+(defn- players-left []
+  (difference (set (db/get-usernames)) (players-taken)))
+
+(defn- other-clans [username]
+  (let [my-clan (:name (db/clan-of-username username))]
+    (remove #(= (:name %) my-clan) (db/get-clans))))
+
 (defroutes app-routes
   (GET "/" req (route-with-common-data "root" req))
   (GET "/login" req (route-with-common-data "login" req))
@@ -59,7 +72,7 @@
 
   (GET "/account" req (friend/authenticated (route-with-common-data "account" req)))
 
-  (POST "/account" {{:keys [old-password new-password confirm] :as params} :params :as req}
+  (POST "/account" {{:keys [name email phone username new-password confirm old-password] :as params} :params :as req}
         (if (= new-password confirm)
           (if-let [user (update-user (friend/current-authentication)
                                      (select-keys params [:username :old-password :new-password :name :email :phone]))]
@@ -74,6 +87,23 @@
             (route-with-common-data "user" req user)
             (assoc (resp/redirect (str (:context req) "/")) :flash "You are not authorized here!")))))
   (GET "/users" req (route-with-common-data "users" req (db/get-usernames)))
+
+  (GET "/clans" req (friend/authenticated (let [username (:username (friend/current-authentication))]
+                                            (route-with-common-data
+                                            "clans" req
+                                            {:username username
+                                             :my-clan (db/clan-of-username username)
+                                             :rest-clans (other-clans username)
+                                             :players-left (players-left)
+                                             :all-players (set (db/get-usernames))}))))
+  (POST "/clan-form" {{:keys [clan-name p1 p2 p3 p4 p5 p6] :as params} :params :as req}
+        (db/insert-clan clan-name [p1 p2 p3 p4 p5] (if (= p6 "") nil p6))
+        (resp/redirect (str (:context req) "/clans")))
+  (POST "/clan-update" {{:keys [clan-name p1 p2 p3 p4 p5 p6] :as params} :params :as req}
+        (let [username (:username (friend/current-authentication))
+              clan (db/clan-of-username username)]
+         (db/update-clan clan [p1 p2 p3 p4 p5] (if (= p6 "") nil p6))
+         (resp/redirect (str (:context req) "/clans"))))
   (route/resources "/")
   (route/not-found "Not Found"))
 

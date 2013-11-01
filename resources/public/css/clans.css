@@ -1,0 +1,18 @@
+.second-well {
+  padding: 15px;
+  margin: 0 auto;
+  background-color: #E8E8E8;
+  border: 1px solid #D7D7D7;
+}
+
+.col-md-10 {
+padding: 0;
+}
+
+.col-md-2 {
+padding: 0;
+}
+
+.btn-default {
+margin: 1px auto;
+}
