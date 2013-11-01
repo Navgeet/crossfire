@@ -91,13 +91,24 @@ document.getElementById('players').appendChild(div);
 </div>" val id id (if-not (= id 6) (str "Player " id)
                           "Reserved player") id id))
 
-(defn html-for-extra [all-players]
-  (format "<small>Extra player</small>
-<div class=\"row\">
+(defn html-for-extra [value]
+  (let [id 6
+        val value]
+    (format "<div class=\"row\">
 <div class=\"col-md-10\">
-<select class=\"form-control\">
-<option></option>%s</select>
-</div></div>" (apply str (map #(format "<option>%s</option>" %) all-players))))
+<input value=\"%s\" id=\"pl%d\" name=\"p%d\" type=\"text\" class=\"form-control\" placeholder=\"%s\" readonly>
+</div>
+<div class=\"col-md-2\">
+<button type=\"button\" class=\"btn btn-default\" onclick=\"
+var val = document.getElementById('pl%d').value;
+var div = document.createElement('div');
+div.innerHTML = '<button type=\\'button\\' class=\\'btn btn-default\\' onclick=\\'button_press(this)\\'>'
++ val + '</button>';
+document.getElementById('pl%d').value='';
+document.getElementById('players').appendChild(div);
+\">clear</button>
+</div>
+</div>" val id id "Reserved player" id id)))
 
 (defn form-my-clan [username players]
   (str "<form action=\"clan-form\" method=\"POST\" class=\"form-signin\">
@@ -110,22 +121,22 @@ document.getElementById('players').appendChild(div);
        (row-for-id-with-val 1 username)
        (apply str (for [id (range 1 5)]
                     (row-for-id-with-val (+ 1 id) "")))
-       (html-for-extra players)
+       (html-for-extra "")
        "<div class=\"row\"><div class=\"col-md-10\">
 <button class=\"btn btn-lg btn-primary btn-block\" type=\"submit\">Submit</button></div></div>
       </form>
 "))
 
-(defn update-my-clan [players extra all-players]
+(defn update-my-clan [clan-name players extra all-players]
   (str "<form action=\"clan-update\" method=\"POST\" class=\"form-signin\">
 <h2 class=\"form-signin-heading\">Update your clan</h2>"
-       "<div class=\"row\">
+       (format "<div class=\"row\">
 <div class=\"col-md-10\">
-<input name=\"clan-name\" type=\"text\" class=\"form-control\" placeholder=\"Clan name\" required autofocus></div></div>"
+<input value=\"%s\" name=\"clan-name\" type=\"text\" class=\"form-control\" placeholder=\"Clan name\" required autofocus></div></div>" clan-name)
        (apply str (for [id (range 0 (count players))
               :let [p (or (nth players id) "")]]
                     (row-for-id-with-val (+ 1 id) p)))
-       (html-for-extra all-players)
+       (html-for-extra extra)
        "<div class=\"row\"><div class=\"col-md-10\">
 <button class=\"btn btn-lg btn-primary btn-block\" type=\"submit\">Update</button></div></div>
       </form>
@@ -171,6 +182,6 @@ document.getElementById('players').appendChild(div);
 </div> </div> </div>
 "
           (available-players username players-left)
-          (if my-clan (update-my-clan (:players my-clan) (:extra my-clan) all-players)
+          (if my-clan (update-my-clan (:name my-clan) (:players my-clan) (:extra my-clan) all-players)
               (form-my-clan username all-players))
           (other-clans rest-clans)))
