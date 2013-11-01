@@ -160,6 +160,7 @@ document.getElementById('players').appendChild(div);
 (defn view [common-data {:keys [username my-clan rest-clans players-left all-players]}]
   (format "<div class=\"container\">
 <h2>Available players:</h1>
+<small>Click on a player's button to add him to your clan.</small>
 <div id=\"players\" class=\"well\">
 %s
 </div><!-- well -->
