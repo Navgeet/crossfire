@@ -108,7 +108,7 @@ document.getElementById('pl%d').value='';
 document.getElementById('players').appendChild(div);
 \">clear</button>
 </div>
-</div>" val id id "Reserved player" id id)))
+</div>" (or val "") id id "Reserved player" id id)))
 
 (defn form-my-clan [username players]
   (str "<form action=\"clan-form\" method=\"POST\" class=\"form-signin\">
