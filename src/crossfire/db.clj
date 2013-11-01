@@ -7,7 +7,7 @@
 (mg/connect-via-uri! "mongodb://kcl:pass@ds051848.mongolab.com:51848/kcl"
  ;; (System/getenv "MONGOLAB_URL")
  )
-;; (def db (mg/set-db! (mg/get-db "kcl")))
+(def db (mg/set-db! (mg/get-db "kcl")))
 
 (defn insert [doc]
   (let [oid (ObjectId.)]
