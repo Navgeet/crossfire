@@ -97,7 +97,7 @@ document.getElementById('players').appendChild(div);
 <div class=\"col-md-10\">
 <select class=\"form-control\">
 <option></option>%s</select>
-</div></div>" (apply str (map #(format "<option>%s</option" %) all-players))))
+</div></div>" (apply str (map #(format "<option>%s</option>" %) all-players))))
 
 (defn form-my-clan [username players]
   (str "<form action=\"clan-form\" method=\"POST\" class=\"form-signin\">
