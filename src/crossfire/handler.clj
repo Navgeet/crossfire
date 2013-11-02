@@ -108,6 +108,7 @@
   (route/not-found "Not Found"))
 
 (def app
+  (db/setup-db)
   (handler/site (friend/authenticate app-routes {:allow-anon? true
                                                  :login-uri "/login"
                                                  :default-landing-uri "/"
