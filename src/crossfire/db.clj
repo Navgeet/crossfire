@@ -3,11 +3,10 @@
             [monger.collection :as coll])
   (:import [org.bson.types ObjectId]))
 
+(def db nil)
 (defn setup-db []
   (mg/connect-via-uri! (System/getenv "MONGOLAB_URL"))
   (alter-var-root db (constantly (mg/set-db! (mg/get-db "kcl")))))
-
-(def db nil)
 
 (defn insert [doc]
   (let [oid (ObjectId.)]
