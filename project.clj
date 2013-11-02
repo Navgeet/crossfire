@@ -5,6 +5,7 @@
                  [hiccup "1.0.1"]
                  [com.cemerick/friend "0.2.0"]
                  [compojure "1.1.5"]
+                 [ring/ring-jetty-adapter "1.2.1"]
                  [com.novemberain/monger "1.7.0-beta1"]]
   :plugins [[lein-ring "0.8.5"]]
   :ring {:handler crossfire.handler/app}

@@ -1,1 +1,1 @@
-web: lein with-profile heroku trampoline ring server
+web: lein with-profile heroku trampoline run -m crossfire.handler $PORT

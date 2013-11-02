@@ -12,7 +12,8 @@
             [compojure.handler :as handler]
             [compojure.route :as route]
             [hiccup.page :as h]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            ring.adapter.jetty))
 
 (derive ::admin ::user)
 
@@ -107,13 +108,20 @@
   (route/resources "/")
   (route/not-found "Not Found"))
 
-(def app (do
-           (db/setup-db)
-           (handler/site (friend/authenticate app-routes {:allow-anon? true
-                                                          :login-uri "/login"
-                                                          :default-landing-uri "/"
-                                                          :unauthorized-handler #(-> (h/html5 [:h2 "You do not have sufficient privileges to access " (:uri %)])
-                                                                                     resp/response
-                                                                                     (resp/status 401))
-                                                          :credential-fn #(creds/bcrypt-credential-fn (db/get-users) %)
-                                                          :workflows [(workflows/interactive-form)]}))))
+(def app (handler/site (friend/authenticate app-routes {:allow-anon? true
+                                                        :login-uri "/login"
+                                                        :default-landing-uri "/"
+                                                        :unauthorized-handler #(-> (h/html5 [:h2 "You do not have sufficient privileges to access " (:uri %)])
+                                                                                   resp/response
+                                                                                   (resp/status 401))
+                                                        :credential-fn #(creds/bcrypt-credential-fn (db/get-users) %)
+                                                        :workflows [(workflows/interactive-form)]})))
+
+(defn -main
+  "For heroku."
+  [& [port]]
+  (if port
+    (do
+      (db/setup-db)
+      (ring.adapter.jetty/run-jetty app {:port (Integer. port)}))
+    (println "No port specified, exiting.")))
