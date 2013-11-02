@@ -11,6 +11,7 @@
     <meta name=\"author\" content=\"\">
     <link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"/img/favicon.ico\">
     <title>KCL</title>
+    <link href=\"//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css\" rel=\"stylesheet\">
     <link href=\"/css/bootstrap.min.css\" rel=\"stylesheet\">
     <link href=\"/css/root.css\" rel=\"stylesheet\">%s
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
