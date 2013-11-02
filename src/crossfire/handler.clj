@@ -88,6 +88,7 @@
             (route-with-common-data "user" req user)
             (assoc (resp/redirect (str (:context req) "/")) :flash "You are not authorized here!")))))
   (GET "/users" req (route-with-common-data "users" req (db/get-usernames)))
+  (GET "/about" req (route-with-common-data "about" req))
 
   (GET "/clans" req (friend/authenticated (let [username (:username (friend/current-authentication))]
                                             (route-with-common-data

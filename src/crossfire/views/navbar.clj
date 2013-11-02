@@ -19,7 +19,8 @@
               <li class=\"active\"><a href=\"#\">Home</a></li>
               <li>%s</li>
               <li>%s</li>
-              <li class=\"dropdown\">
+              <li>%s</li>
+              <li align=\"right\" class=\"dropdown\">
                 <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">%s<b class=\"caret\"></b></a>
                 <ul class=\"dropdown-menu\">
                   <li>%s</li>
@@ -35,6 +36,7 @@
 "
           (utils/link "/clans" "Clans")
           (utils/link "/users" "Users")
+          (utils/link "/about" "About")
           (if user (str "Hello, " (:username user)) "New Here?")
           (if user (utils/link "/logout" "Logout") (utils/link "/login" "Login"))
           (if user (utils/link "/account" "Your account") (utils/link "/signup" "Sign Up"))
