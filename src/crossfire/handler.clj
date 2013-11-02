@@ -107,13 +107,13 @@
   (route/resources "/")
   (route/not-found "Not Found"))
 
-(def app
-  (db/setup-db)
-  (handler/site (friend/authenticate app-routes {:allow-anon? true
-                                                 :login-uri "/login"
-                                                 :default-landing-uri "/"
-                                                 :unauthorized-handler #(-> (h/html5 [:h2 "You do not have sufficient privileges to access " (:uri %)])
-                                                                            resp/response
-                                                                            (resp/status 401))
-                                                 :credential-fn #(creds/bcrypt-credential-fn (db/get-users) %)
-                                                 :workflows [(workflows/interactive-form)]})))
+(def app (do
+           (db/setup-db)
+           (handler/site (friend/authenticate app-routes {:allow-anon? true
+                                                          :login-uri "/login"
+                                                          :default-landing-uri "/"
+                                                          :unauthorized-handler #(-> (h/html5 [:h2 "You do not have sufficient privileges to access " (:uri %)])
+                                                                                     resp/response
+                                                                                     (resp/status 401))
+                                                          :credential-fn #(creds/bcrypt-credential-fn (db/get-users) %)
+                                                          :workflows [(workflows/interactive-form)]}))))
