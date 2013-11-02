@@ -20,7 +20,7 @@
               <li>%s</li>
               <li>%s</li>
               <li>%s</li>
-              <li align=\"right\" class=\"dropdown\">
+              <li class=\"dropdown\">
                 <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">%s<b class=\"caret\"></b></a>
                 <ul class=\"dropdown-menu\">
                   <li>%s</li>
