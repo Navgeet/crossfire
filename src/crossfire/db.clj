@@ -6,7 +6,7 @@
 (def db nil)
 (defn setup-db []
   (mg/connect-via-uri! (System/getenv "MONGOLAB_URL"))
-  (alter-var-root db (constantly (mg/set-db! (mg/get-db "kcl")))))
+  (alter-var-root #'db (constantly (mg/set-db! (mg/get-db "kcl")))))
 
 (defn insert [doc]
   (let [oid (ObjectId.)]
